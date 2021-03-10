@@ -1,6 +1,6 @@
 import {Sequelize} from 'sequelize-typescript';
 import { config } from './config/config';
-
+import dotenv from 'dotenv';
 
 const c = config.dev;
 
