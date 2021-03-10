@@ -27,15 +27,32 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // RETURNS
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
+  // @ts-ignore
+  app.get("/filteredImage", async (req, res ) => {
+            const { image_url } = req.query;
+            if(!image_url){
+              res.status(400).send("Invalid request. The image_url query parameter is missing.");
+            }
+
+            const filteredImagePath = await filterImageFromURL(image_url);
+            res.sendFile(filteredImagePath, async (err) =>{
+              await deleteLocalFiles([filteredImagePath])
+              if(!err){
+                res.status(200)
+              }
+              res.status(500).send("The server has encountered an error while returning the filtered image.");
+
+            })
+  })
+
   /**************************************************************************** */
 
   //! END @TODO1
-  
   // Root Endpoint
   // Displays a simple message to the user
   app.get( "/", async ( req, res ) => {
     res.send("try GET /filteredimage?image_url={{}}")
-  } );
+  } )
   
 
   // Start the Server
